@@ -49,3 +49,21 @@ let pokemonList = [
   },
 ];
 console.log(pokemonList);
+
+// write main logo
+document.write('<h1>Pokémon List</h2>');
+
+for (let i = 0; i < pokemonList.length; i++) {
+  let pokemon = pokemonList[i];
+  let howBigNote = '';
+
+  // add a note for Pokemons higher than 1m
+  if (pokemon.height > 1) {
+    howBigNote = " - Wow! That's Big!";
+  }
+
+  document.write(
+    `<p><span class="name">${pokemon.name} </span>
+    (<span class=height>height:</span> ${pokemon.height}m)${howBigNote}</p>`
+  );
+}
