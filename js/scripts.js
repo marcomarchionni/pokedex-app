@@ -1,12 +1,11 @@
-let = pokemonRepository = (function () {
-  let pokemonKeys = ['name', 'types', 'height', 'weight', 'values'];
-  let pokemonValuesKeys = ['hp', 'attack', 'defense', 'speed'];
+let pokemonRepository = (function () {
   let pokemonList = [
     {
       name: 'Bulbasaur',
       types: ['grass', 'poison'],
       height: 0.7,
       weight: 6.9,
+      color: 'green',
       values: {
         hp: 45,
         attack: 49,
@@ -19,6 +18,7 @@ let = pokemonRepository = (function () {
       types: ['grass', 'poison'],
       height: 1,
       weight: 13,
+      color: 'red',
       values: {
         hp: 60,
         attack: 62,
@@ -31,6 +31,7 @@ let = pokemonRepository = (function () {
       types: ['fire'],
       height: 0.6,
       weight: 8.5,
+      color: 'violet',
       values: {
         hp: 39,
         attack: 52,
@@ -43,6 +44,7 @@ let = pokemonRepository = (function () {
       types: ['flying', 'normal'],
       height: 1.5,
       weight: 39.5,
+      color: 'gold',
       values: {
         hp: 83,
         attack: 80,
@@ -52,11 +54,15 @@ let = pokemonRepository = (function () {
     },
   ];
 
-  function stringArraysHaveSameValues(arr1, arr2) {
-    return arr1.sort().join() === arr2.sort().join();
-  }
-
   function isValidPokemon(item) {
+    let pokemonKeys = ['name', 'types', 'height', 'weight', 'values'];
+    let pokemonValuesKeys = ['hp', 'attack', 'defense', 'speed'];
+
+    // helper method to compare arrays of Keys
+    function objectKeysAreDifferent(arr1, arr2) {
+      return arr1.sort().join() !== arr2.sort().join();
+    }
+
     // check if argument is an object
     if (typeof item !== 'object') {
       console.log('Argument is not an object');
@@ -65,13 +71,13 @@ let = pokemonRepository = (function () {
 
     // validate argument properties keys
     let itemKeys = Object.keys(item);
-    if (!stringArraysHaveSameValues(itemKeys, pokemonKeys)) {
+    if (objectKeysAreDifferent(itemKeys, pokemonKeys)) {
       console.log('Argument properties are not valid');
       return false;
     }
 
     let itemValuesKeys = Object.keys(item.values);
-    if (!stringArraysHaveSameValues(itemValuesKeys, pokemonValuesKeys)) {
+    if (objectKeysAreDifferent(itemValuesKeys, pokemonValuesKeys)) {
       console.log('Argument properties are not valid');
       return false;
     }
@@ -100,47 +106,38 @@ let = pokemonRepository = (function () {
     return pokemonList;
   }
 
+  function addListItem(pokemon) {
+    let pokemonListNode = document.querySelector('.pokemon-list');
+
+    //setup list item
+    let listItem = document.createElement('li');
+    listItem.classList.add('pokemon-list__item');
+
+    //setup button
+    let itemButton = document.createElement('button');
+    itemButton.innerText = pokemon.name;
+    itemButton.classList.add('pokemon-button');
+    itemButton.classList.add(`pokemon-button--${pokemon.color}`);
+    itemButton.addEventListener('click', showDetails(pokemon));
+
+    // append elements
+    listItem.appendChild(itemButton);
+    pokemonListNode.appendChild(listItem);
+  }
+
+  function showDetails(pokemon) {
+    return function () {
+      console.log(pokemon);
+    };
+  }
+
   return {
     add: add,
     getByName: getByName,
     getAll: getAll,
+    addListItem: addListItem,
   };
 })();
 
-function printPokemon(pokemon) {
-  let howBigNote = '';
-
-  // add a note for Pokemons higher than 1m
-  if (pokemon.height > 1) {
-    howBigNote = " - Wow! That's Big!";
-  }
-
-  document.write(
-    `<p><span class="name">${pokemon.name} </span>
-    (<span class=height>height:</span> ${pokemon.height}m)${howBigNote}</p>`
-  );
-}
-
 // write main logo and pokemon list
-document.write('<h1>Pokémon List</h2>');
-pokemonRepository.getAll().forEach(printPokemon);
-
-// test add and getByName methods
-let pinkPokemon = {
-  name: 'Pink',
-  types: ['fire'],
-  height: 0.2,
-  weight: 1.5,
-  values: {
-    hp: 18,
-    attack: 12,
-    defense: 89,
-    speed: 99,
-  },
-};
-
-pokemonRepository.add(pinkPokemon);
-console.log(pokemonRepository.getAll());
-
-let pidgeotPokemon = pokemonRepository.getByName('Pidgeot');
-console.log(pidgeotPokemon);
+pokemonRepository.getAll().forEach(pokemonRepository.addListItem);
