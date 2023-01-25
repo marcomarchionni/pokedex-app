@@ -131,10 +131,6 @@ let pokemonRepository = (function () {
   }
 
   function addListItem(pokemon) {
-    function getPokemonName(pokemon) {
-      return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-    }
-
     let pokemonListNode = document.querySelector('.pokemon-list');
 
     //setup list item
@@ -143,7 +139,7 @@ let pokemonRepository = (function () {
 
     //setup button
     let itemButton = document.createElement('button');
-    itemButton.innerText = getPokemonName(pokemon);
+    itemButton.innerText = pokemon.name;
     itemButton.classList.add('pokemon-button');
     itemButton.classList.add(`pokemon-button--${pokemon.color}`);
     itemButton.addEventListener('click', showPokemonDetails(pokemon));
@@ -200,9 +196,11 @@ let pokemonRepository = (function () {
     modalGrid.classList.add('modal-grid');
 
     // >> create and append img item
-    let imgItem = document.createElement('img');
-    imgItem.classList.add('modal-grid__img');
-    imgItem.setAttribute('src', pokemon.imageUrl);
+    let imgItem = document.createElement('div');
+    imgItem.classList.add('modal-grid__img-item');
+    let img = document.createElement('img');
+    img.setAttribute('src', pokemon.imageUrl);
+    imgItem.appendChild(img);
     modalGrid.appendChild(imgItem);
 
     // >> create and append text items
