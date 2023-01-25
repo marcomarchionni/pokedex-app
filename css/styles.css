@@ -1,23 +1,25 @@
+/* 1. General */
+
 :root {
-  --light-gold: hsl(46, 59%, 54%);
-  --gold: hsl(46, 79%, 54%);
-  --dark-gold: hsl(46, 79%, 48%);
-  --light-violet: hsl(263, 21%, 50%);
-  --violet: hsl(263, 41%, 50%);
-  --dark-violet: hsl(263, 41%, 40%);
-  --light-green: hsl(129, 26%, 39%);
-  --green: hsl(129, 46%, 39%);
-  --dark-green: hsl(129, 46%, 32%);
-  --light-red: hsl(1, 70%, 56%);
-  --red: hsl(1, 100%, 56%);
-  --dark-red: hsl(1, 100%, 46%);
-  --light-pink: hsl(332, 70%, 58%);
-  --pink: hsl(332, 100%, 58%);
-  --dark-pink: hsl(332, 100%, 52%);
-  --brown: #b89355;
+  --light-gold: hwb(46 47% 12%);
+  --gold: hsl(46, 55%, 52%);
+  --bright-gold: hsl(46, 96%, 47%);
+  --light-violet: hsl(263, 22%, 61%);
+  --violet: hsl(263, 21%, 50%);
+  --bright-violet: hsl(263, 41%, 40%);
+  --light-green: hsl(128, 24%, 55%);
+  --green: hsl(129, 26%, 39%);
+  --bright-green: hsl(129, 88%, 30%);
+  --light-red: hsl(1, 73%, 65%);
+  --red: #e64c3c;
+  --bright-red: hsl(1, 100%, 46%);
+  --light-pink: hsl(332, 73%, 69%);
+  --pink: hsl(332, 70%, 58%);
+  --bright-pink: hsl(332, 100%, 52%);
   --blue: #1b53ba;
   --light-blue: hwb(198 71% 5%);
   --light-gray: rgb(233, 233, 233);
+  --dark-gray: #3c3c3c;
 }
 
 body {
@@ -26,35 +28,66 @@ body {
   font-size: x-large;
   color: black;
   background-color: var(--light-gray);
-  width: 50%;
-  margin: 20px auto;
-}
-
-@media screen and (max-width: 600px) {
-  body {
-    width: 90%;
-  }
+  box-sizing: border-box;
 }
 
 h1 {
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 800;
-  font-size: 66px;
+  font-size: 80px;
   text-align: center;
 }
 
-.main-title {
-  color: var(--gold);
-  padding: 10px;
-  margin: 50px 0;
-  text-shadow: 4px 0 var(--blue), -4px 0 var(--blue), 0 4px var(--blue),
-    0 -4px var(--blue), 3px 3px var(--blue), -3px -3px var(--blue),
-    3px -3px var(--blue), -3px 3px var(--blue);
+/* 2. Main content */
+
+.main-container {
+  width: 50%;
+  margin: 20px auto;
+  padding: 10px 30px;
+  background: white;
+  border-radius: 20px;
 }
+
+@media screen and (max-width: 900px) {
+  .main-container {
+    width: 90%;
+  }
+}
+
+/* 2.1 Header */
+
+.header {
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 10px 30px;
+  color: var(--red);
+  padding: 10px;
+  margin: 60px 10px;
+}
+
+.header__logo {
+  flex-grow: 0;
+  flex-shrink: 1;
+  max-width: 80px;
+}
+
+.header__title {
+  flex-grow: 0;
+  flex-shrink: 1;
+  color: var(--red);
+  margin: 0;
+  text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 -2px black,
+    1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+
+/* 2.2 Button List */
 
 .pokemon-list {
   list-style: none;
   padding: 0px;
+  margin-top: 10px;
 }
 
 .pokemon-list__item {
@@ -62,78 +95,213 @@ h1 {
 }
 
 .pokemon-button {
-  background-color: lightgray;
   width: 100%;
-  height: 60px;
+  height: 80px;
   margin: 0;
   padding: 0 20px;
   text-decoration: none;
   border-radius: 10px;
-  font-size: larger;
+  font-size: xx-large;
+  font-weight: bold;
   border: none;
   color: white;
+}
+
+.pokemon-button:focus-visible {
+  outline: none;
 }
 
 .pokemon-button:active {
   transform: translateY(1px);
 }
 
-.pokemon-button--red {
-  background-color: var(--light-red);
-}
+/* 2.2.1 Button list colors */
 
-.pokemon-button--red:hover {
+.pokemon-button--red {
   background-color: var(--red);
 }
 
-.pokemon-button--red:active {
-  background-color: var(--dark-red);
+.pokemon-button--red:hover,
+.pokemon-button--red:focus {
+  background-color: var(--bright-red);
 }
 
 .pokemon-button--green {
-  background-color: var(--light-green);
-}
-
-.pokemon-button--green:hover {
   background-color: var(--green);
 }
 
-.pokemon-button--green:active {
-  background-color: var(--dark-green);
+.pokemon-button--green:hover,
+.pokemon-button--green:focus {
+  background-color: var(--bright-green);
 }
 
 .pokemon-button--violet {
-  background-color: var(--light-violet);
-}
-
-.pokemon-button--violet:hover {
   background-color: var(--violet);
 }
 
-.pokemon-button--violet:active {
-  background-color: var(--dark-violet);
+.pokemon-button--violet:hover,
+.pokemon-button--violet:focus {
+  background-color: var(--bright-violet);
 }
 
 .pokemon-button--gold {
-  background-color: var(--light-gold);
-}
-
-.pokemon-button--gold:hover {
   background-color: var(--gold);
 }
 
-.pokemon-button--gold:active {
-  background-color: var(--dark-gold);
+.pokemon-button--gold:hover,
+.pokemon-button--gold:focus {
+  background-color: var(--bright-gold);
 }
 
 .pokemon-button--pink {
-  background-color: var(--light-pink);
-}
-
-.pokemon-button--pink:hover {
   background-color: var(--pink);
 }
 
-.pokemon-button--pink:active {
-  background-color: var(--dark-pink);
+.pokemon-button--pink:hover,
+.pokemon-button--pink:focus {
+  background-color: var(--bright-pink);
+}
+
+/* 2.3 Pokemon Details Modal */
+
+.modal-container {
+  display: none;
+}
+
+.modal-container.is-visible {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  overflow: auto;
+  display: grid;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal {
+  position: relative;
+  display: inline-block;
+  color: var(--dark-gray);
+  padding: 30px;
+  margin: auto;
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  border: none;
+  text-decoration: none;
+  background: none;
+  font-size: larger;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.modal-close__icon {
+  width: 40px;
+  height: 40px;
+}
+
+.modal-title {
+  text-align: left;
+  margin: 20px 0px 10px 30px;
+  font-size: 48px;
+  color: black;
+}
+
+/* 2.3.1 Pokemon Details Modal Colors */
+
+.modal--gold {
+  background: var(--light-gold);
+}
+
+.modal--red {
+  background: var(--light-red);
+}
+
+.modal--pink {
+  background: var(--light-pink);
+}
+
+.modal--violet {
+  background: var(--light-violet);
+}
+
+.modal--green {
+  background: var(--light-green);
+}
+
+/* 2.3.2 Modal Grid */
+
+.modal-grid {
+  display: grid;
+  grid-template-areas:
+    "img img img height stats stats"
+    "img img img weight stats stats"
+    "img img img types stats stats";
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+@media screen and (max-width: 850px) {
+  .modal {
+    max-width: 500px;
+  }
+
+  .modal-grid {
+    grid-template-areas:
+      "img img img"
+      "img img img"
+      "img img img"
+      "height stats stats"
+      "weight stats stats"
+      "types stats stats";
+  }
+}
+
+.modal-grid__img {
+  grid-area: img;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-grid__text-item {
+  text-align: center;
+  padding: 10px;
+  font-size: large;
+  background: white;
+  border-radius: 10px;
+  color: var(--dark-gray);
+}
+
+.modal-grid__height {
+  grid-area: height;
+}
+
+.modal-grid__weight {
+  grid-area: weight;
+}
+
+.modal-grid__types {
+  grid-area: types;
+}
+
+.modal-grid__stats {
+  grid-area: stats;
+}
+
+.modal-grid__stats table {
+  border-collapse: separate;
+  border-spacing: 1em;
+  text-align: left;
 }
