@@ -23,7 +23,7 @@
 }
 
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
   font-size: x-large;
   color: black;
@@ -32,7 +32,7 @@ body {
 }
 
 h1 {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-weight: 800;
   font-size: 80px;
   text-align: center;
@@ -245,10 +245,11 @@ h1 {
 
 .modal-grid {
   display: grid;
+  grid-template-columns: 3fr 1fr 2fr;
   grid-template-areas:
-    "img img img height stats stats"
-    "img img img weight stats stats"
-    "img img img types stats stats";
+    'img height stats'
+    'img weight stats'
+    'img types stats';
   column-gap: 15px;
   row-gap: 15px;
 }
@@ -260,12 +261,12 @@ h1 {
 
   .modal-grid {
     grid-template-areas:
-      "img img img"
-      "img img img"
-      "img img img"
-      "height stats stats"
-      "weight stats stats"
-      "types stats stats";
+      'img img img'
+      'img img img'
+      'img img img'
+      'height stats stats'
+      'weight stats stats'
+      'types stats stats';
   }
 }
 
