@@ -9,30 +9,175 @@
       href="./img/pokedex-favicon.ico"
       type="image/x-icon"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
   </head>
-  <body>
-    <main class="main-container">
-      <div class="header">
-        <img class="header__logo" src="./img/pokedex-main-logo.svg" />
-        <h1 class="header__title">Pokédex</h1>
+  <body class="bg-dark">
+    <header class="container-fluid bg-dark fixed-top z-1">
+      <div class="row justify-content-center">
+        <div
+          class="col-md-9 col-lg-8 col-xl-6 bg-light pt-4 border-top border-start border-end border-dark border-5 rounded-top-5"
+        >
+          <nav
+            class="navbar navbar-expand-sm justify-content-around"
+            aria="Main navigation"
+          >
+            <a class="navbar-brand d-flex align-items-center" href="#">
+              <img
+                class="img-fluid"
+                src="./img/pokedex-main-logo.svg"
+                alt="Logo"
+                width="80px"
+              />
+              <span class="display-4 fw-bold px-3">Pokédex</span>
+            </a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div
+              class="collapse navbar-collapse flex-grow-0 text-center"
+              id="navbarNav"
+            >
+              <div class="navbar-nav fs-5">
+                <a class="nav-link active" aria-current="page" href="#"
+                  >List 1</a
+                >
+                <a class="nav-link" href="#">List 2</a>
+                <a class="nav-link" href="#">List 3</a>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
-      <ul class="pokemon-list"></ul>
-      <div class="modal-container"></div>
+    </header>
+    <main>
+      <!-- Button list-->
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div
+            class="col-md-9 col-lg-8 col-xl-6 bg-light pt-2 border-start border-end border-dark border-5"
+          >
+            <div class="d-grid gap-2 p-4" id="pokemon-list-container"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="pokemonModal"
+        tabindex="-1"
+        aria-labelledby="pokemonModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal--red p-4" id="modalContent">
+            <div class="modal-header align-items-start">
+              <h1 class="modal-title fs-1 fw-bold px-4" id="modalTitle">
+                Name
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+              <div class="container-fluid text-center">
+                <div class="row g-0">
+                  <div class="col-lg-6">
+                    <img
+                      class="img-fluid"
+                      src="./img/bulbasaur.png"
+                      alt="bulbasaur artwork"
+                    />
+                  </div>
+                  <div class="col-lg-2 col-sm-4 d-flex flex-column">
+                    <div class="col modal-cell">
+                      <h5>Height</h5>
+                      <p>34</p>
+                    </div>
+                    <div class="col modal-cell">
+                      <h5>Weight</h5>
+                      <p>24</p>
+                    </div>
+                    <div class="col modal-cell">
+                      <h5>Types</h5>
+                      <p>Grass, Poison</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-8 d-flex flex-column">
+                    <div class="modal-cell flex-fill">
+                      <h5>Stats</h5>
+                      <table class="table table-borderless text-start m-auto">
+                        <tbody>
+                          <tr>
+                            <th>Hp</th>
+                            <td>45</td>
+                          </tr>
+                          <tr>
+                            <th>Attack</th>
+                            <td>49</td>
+                          </tr>
+                          <tr>
+                            <th>Defense</th>
+                            <td>49</td>
+                          </tr>
+                          <tr>
+                            <th>Special Attack</th>
+                            <td>65</td>
+                          </tr>
+                          <tr>
+                            <th>Special Defense</th>
+                            <td>65</td>
+                          </tr>
+                          <tr>
+                            <th>Speed</th>
+                            <td>45</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
+    <footer></footer>
     <script src="js/polyfill.min.js"></script>
     <script src="js/fetch.umd.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
     <script src="js/scripts.js"></script>
   </body>
 </html>

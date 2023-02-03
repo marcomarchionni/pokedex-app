@@ -2,11 +2,13 @@ let pokemonRepository = (function () {
   let pokemonList = [];
   let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=30';
   let colors = ['red', 'violet', 'gold', 'green', 'pink'];
-  let pokemonKeys = ['name', 'detailsUrl'];
-  let modalContainer = document.querySelector('.modal-container');
+  let pokemonListContainer = $('#pokemon-list-container');
+  let modalContent = $('#modalContent');
+  let modalTitle = $('#modalTitle');
+  let modalBody = $('#modalBody');
 
   // Generic helper methods
-  function polishText(sentence) {
+  function formatText(sentence) {
     function capitalize(w) {
       return w.charAt(0).toUpperCase() + w.slice(1);
     }
@@ -22,7 +24,7 @@ let pokemonRepository = (function () {
 
   // Pokemon prototype
   function Pokemon(item) {
-    this.name = polishText(item.name);
+    this.name = formatText(item.name);
     this.detailsUrl = item.url;
     this.color = getRandomColor();
     this.setFullDetails = function (details) {
@@ -34,7 +36,7 @@ let pokemonRepository = (function () {
       // add types
       let types = '';
       details.types.forEach(function (t) {
-        let type = polishText(t.type.name);
+        let type = formatText(t.type.name);
         types = types + type + ', ';
       });
       this.types = types.slice(0, -2);
@@ -42,7 +44,7 @@ let pokemonRepository = (function () {
       // add stats
       let stats = new Map();
       details.stats.forEach(function (s) {
-        let statName = polishText(s.stat.name);
+        let statName = formatText(s.stat.name);
         let statValue = s.base_stat;
         stats.set(statName, statValue);
       });
@@ -50,35 +52,24 @@ let pokemonRepository = (function () {
     };
   }
 
-  // API call for base item
+  // API call for fetching a list of base items
   function loadList() {
     function itemIsValid(item) {
-      let isValid;
-      try {
-        hasName = item.name != null;
-        hasUrl = item.url != null;
-        isValid = hasName && hasUrl;
-      } catch (e) {
-        console.log('Pokemon data is not valid');
-        console.log(e);
-        isValid = false;
-      } finally {
-        return isValid;
-      }
+      let isObject = typeof item === 'object';
+      let hasName = 'name' in item;
+      let hasUrl = 'url' in item;
+      let itemIsValid = isObject && hasName && hasUrl;
+      return itemIsValid;
     }
 
     function addPokemon(item) {
       if (itemIsValid(item)) {
         //add new pokemon to repository
-        let pokemon = new Pokemon(item);
-        pokemonList.push(pokemon);
+        pokemonList.push(new Pokemon(item));
       }
     }
 
-    return fetch(apiUrl)
-      .then(function (response) {
-        return response.json();
-      })
+    return $.ajax(apiUrl)
       .then(function (json) {
         json.results.forEach(addPokemon);
       })
@@ -87,7 +78,7 @@ let pokemonRepository = (function () {
       });
   }
 
-  // API call for full details
+  // API call for fetching an item's full details
   function loadDetails(pokemon) {
     function detailsAreValid(details) {
       let isValid;
@@ -113,10 +104,7 @@ let pokemonRepository = (function () {
       }
     }
 
-    return fetch(pokemon.detailsUrl)
-      .then(function (response) {
-        return response.json();
-      })
+    return $.ajax(pokemon.detailsUrl)
       .then(function (details) {
         if (detailsAreValid(details)) pokemon.setFullDetails(details);
         return pokemon;
@@ -130,158 +118,97 @@ let pokemonRepository = (function () {
     return pokemonList;
   }
 
-  function addListItem(pokemon) {
-    let pokemonListNode = document.querySelector('.pokemon-list');
-
-    //setup list item
-    let listItem = document.createElement('li');
-    listItem.classList.add('pokemon-list__item');
-
+  function addPokemonButton(pokemon) {
     //setup button
-    let itemButton = document.createElement('button');
-    itemButton.innerText = pokemon.name;
-    itemButton.classList.add('pokemon-button');
-    itemButton.classList.add(`pokemon-button--${pokemon.color}`);
-    itemButton.addEventListener('click', showPokemonDetails(pokemon));
+    let pokemonButton = $(`<button>${pokemon.name}</button>`)
+      .attr('data-bs-toggle', 'modal')
+      .attr('data-bs-target', '#pokemonModal')
+      .addClass('btn')
+      .addClass('btn-block')
+      .addClass(`btn-pokemon--${pokemon.color}`)
+      .on('click', showPokemonDetails(pokemon));
 
-    // append elements
-    listItem.appendChild(itemButton);
-    pokemonListNode.appendChild(listItem);
+    // append element
+    pokemonListContainer.append(pokemonButton);
   }
 
-  function appendModal(pokemon) {
-    function createGridTextItem(title, text) {
-      let item = document.createElement('div');
-      let customClass = `modal-grid__${title.toLowerCase()}`;
-      item.classList.add('modal-grid__text-item', customClass);
-      let itemTitle = document.createElement('h3');
-      itemTitle.innerText = title;
-      let itemValue = document.createElement('p');
-      itemValue.innerText = text;
-      item.appendChild(itemTitle);
-      item.appendChild(itemValue);
-      return item;
+  function setModalContent(pokemon) {
+    // reset modal content
+    modalTitle.empty();
+    modalBody.empty();
+    modalContent.removeClass();
+
+    // set modal color
+    modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
+
+    // set modal title
+    modalTitle.text(pokemon.name);
+
+    // set modal body
+    let container = $('<div></div>').addClass('container-fluid text-center');
+    let mainRow = $('<div></div>').addClass('row g-0');
+
+    // compose img column
+    let imgCol = $('<div></div>').addClass('col-sm-6');
+    let pokemonImg = $('<img></img>')
+      .addClass('img-fluid')
+      .attr('src', `${pokemon.imageUrl}`)
+      .attr('alt', `${pokemon.name} artwork`);
+    imgCol.append(pokemonImg);
+
+    // compese misc column
+    let miscColumn = $('<div></div>').addClass(
+      'col-lg-2 col-sm-4 d-flex flex-column'
+    );
+    let heightCell = $('<div></div>')
+      .addClass('col modal-cell')
+      .append('<h5>Height</h5>')
+      .append(`<p>${pokemon.height}</p>`);
+
+    let weightCell = $('<div></div>')
+      .addClass('col modal-cell')
+      .append('<h5>Weight</h5>')
+      .append(`<p>${pokemon.weight}</p>`);
+
+    let typesCell = $('<div></div>')
+      .addClass('col modal-cell')
+      .append('<h5>Types</h5>')
+      .append(`<p>${pokemon.types}</p>`);
+
+    miscColumn.append(heightCell).append(weightCell).append(typesCell);
+
+    // compose stats column
+    let statsColumn = $('<div></div>').addClass(
+      'col-lg-4 col-sm-8 d-flex flex-column'
+    );
+    let statsCell = $('<div></div>').addClass('modal-cell flex-fill');
+    let statsTitle = $('<h5>Stats</h5>');
+    let statsTable = $('<table></table>').addClass(
+      'table table-borderless text-start m-auto'
+    );
+    let statsTbody = $('<tbody></tbody>');
+
+    for (let [statName, statValue] of pokemon.stats) {
+      let tRow = $('<tr></tr>');
+      let tHeader = $(`<th>${statName}</th>`);
+      let tData = $(`<td>${statValue}</td>`);
+      tRow.append(tHeader).append(tData);
+      statsTbody.append(tRow);
     }
+    statsTable.append(statsTbody);
+    statsCell.append(statsTitle).append(statsTable);
+    statsColumn.append(statsCell);
 
-    function closeModal() {
-      modalContainer.classList.remove('is-visible');
-    }
-
-    // clear container
-    modalContainer.innerHTML = '';
-
-    // create modal
-    let modal = document.createElement('div');
-    modal.classList.add('modal');
-    modal.classList.add(`modal--${pokemon.color}`);
-
-    // > create and append modal-close button
-    let modalClose = document.createElement('button');
-    modalClose.classList.add('modal-close');
-    let modalCloseIcon = document.createElement('img');
-    modalCloseIcon.classList.add('modal-close__icon');
-    modalCloseIcon.setAttribute('src', 'img/close-icon.png');
-    modalClose.appendChild(modalCloseIcon);
-    modalClose.addEventListener('click', closeModal);
-    modal.appendChild(modalClose);
-
-    // > create and append modal title
-    let modalTitle = document.createElement('h2');
-    modalTitle.classList.add('modal-title');
-    modalTitle.innerText = pokemon.name;
-    modal.appendChild(modalTitle);
-
-    // > create modal grid
-    let modalGrid = document.createElement('div');
-    modalGrid.classList.add('modal-grid');
-
-    // >> create and append img item
-    let imgItem = document.createElement('div');
-    imgItem.classList.add('modal-grid__img-item');
-    let img = document.createElement('img');
-    img.setAttribute('src', pokemon.imageUrl);
-    imgItem.appendChild(img);
-    modalGrid.appendChild(imgItem);
-
-    // >> create and append text items
-    let heightItem = createGridTextItem('Height', pokemon.height);
-    modalGrid.appendChild(heightItem);
-    let weightItem = createGridTextItem('Weight', pokemon.weight);
-    modalGrid.appendChild(weightItem);
-    let typesItem = createGridTextItem('Types', pokemon.types);
-    modalGrid.appendChild(typesItem);
-
-    // >> create stats item
-    let statsItem = document.createElement('div');
-    statsItem.classList.add('modal-grid__text-item', 'modal-grid__stats');
-
-    let statsTitle = document.createElement('h3');
-    statsTitle.innerText = 'Stats';
-    statsItem.appendChild(statsTitle);
-
-    // >>> create and append stats table
-    let statsTable = document.createElement('table');
-    let statsTbody = document.createElement('tbody');
-    let statsMap = pokemon.stats;
-    for (let [statName, statValue] of statsMap) {
-      let tableRow = document.createElement('tr');
-      let tableHeader = document.createElement('th');
-      tableHeader.innerText = statName;
-      let tableData = document.createElement('td');
-      tableData.innerText = statValue;
-      tableRow.appendChild(tableHeader);
-      tableRow.appendChild(tableData);
-      statsTbody.appendChild(tableRow);
-    }
-    statsTable.appendChild(statsTbody);
-
-    // <<< append stats table
-    statsItem.appendChild(statsTable);
-
-    // <<  append stats item
-    modalGrid.appendChild(statsItem);
-
-    // < append modal grid
-    modal.appendChild(modalGrid);
-
-    // append modal
-    modalContainer.appendChild(modal);
-
-    // Implement other close-modal functionalities
-    // > Click outside modal
-    modalContainer.addEventListener('click', function (e) {
-      let target = e.target;
-      if (target === modalContainer) {
-        closeModal();
-      }
-    });
-    // > Press Esc key
-    window.addEventListener('keydown', function (e) {
-      if (
-        e.key === 'Escape' &&
-        modalContainer.classList.contains('is-visible')
-      ) {
-        closeModal();
-      }
-    });
-
-    // append modal
-    modalContainer.appendChild(modal);
-
-    // show modal container
-    modalContainer.classList.add('is-visible');
-
-    return;
+    // append components
+    mainRow.append(imgCol).append(miscColumn).append(statsColumn);
+    container.append(mainRow);
+    modalBody.append(container);
   }
 
   function showPokemonDetails(pokemon) {
     return function () {
       loadDetails(pokemon).then(function (pokemon) {
-        // delete anything in modal container
-        modalContainer.innerHTML = '';
-
-        // append modal
-        appendModal(pokemon);
+        setModalContent(pokemon);
       });
     };
   }
@@ -289,7 +216,7 @@ let pokemonRepository = (function () {
   return {
     loadList: loadList,
     getAll: getAll,
-    addListItem: addListItem,
+    addListItem: addPokemonButton,
   };
 })();
 
