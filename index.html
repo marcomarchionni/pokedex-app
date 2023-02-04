@@ -57,12 +57,20 @@
               class="collapse navbar-collapse flex-grow-0 text-center"
               id="navbarNav"
             >
-              <div class="navbar-nav fs-5">
-                <a class="nav-link active" aria-current="page" href="#"
-                  >List 1</a
+              <div class="navbar-nav fs-5 pt-2">
+                <button
+                  class="btn btn-link nav-link active"
+                  aria-current="page"
+                  id="AHNavButton"
                 >
-                <a class="nav-link" href="#">List 2</a>
-                <a class="nav-link" href="#">List 3</a>
+                  A-H
+                </button>
+                <button class="btn btn-link nav-link" id="IQNavButton">
+                  I-Q
+                </button>
+                <button class="btn btn-link nav-link" id="RZNavButton">
+                  R-Z
+                </button>
               </div>
             </div>
           </nav>
@@ -89,8 +97,10 @@
         aria-hidden="true"
       >
         <div class="modal-dialog modal-lg">
-          <div class="modal-content modal--red p-4" id="modalContent">
+          <!-- Inject modal color class here -->
+          <div class="modal-content p-4" id="modalContent">
             <div class="modal-header align-items-start">
+              <!-- Injet modal title here -->
               <h1 class="modal-title fs-1 fw-bold px-4" id="modalTitle">
                 Name
               </h1>
@@ -101,66 +111,8 @@
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body" id="modalBody">
-              <div class="container-fluid text-center">
-                <div class="row g-0">
-                  <div class="col-lg-6">
-                    <img
-                      class="img-fluid"
-                      src="./img/bulbasaur.png"
-                      alt="bulbasaur artwork"
-                    />
-                  </div>
-                  <div class="col-lg-2 col-sm-4 d-flex flex-column">
-                    <div class="col modal-cell">
-                      <h5>Height</h5>
-                      <p>34</p>
-                    </div>
-                    <div class="col modal-cell">
-                      <h5>Weight</h5>
-                      <p>24</p>
-                    </div>
-                    <div class="col modal-cell">
-                      <h5>Types</h5>
-                      <p>Grass, Poison</p>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-sm-8 d-flex flex-column">
-                    <div class="modal-cell flex-fill">
-                      <h5>Stats</h5>
-                      <table class="table table-borderless text-start m-auto">
-                        <tbody>
-                          <tr>
-                            <th>Hp</th>
-                            <td>45</td>
-                          </tr>
-                          <tr>
-                            <th>Attack</th>
-                            <td>49</td>
-                          </tr>
-                          <tr>
-                            <th>Defense</th>
-                            <td>49</td>
-                          </tr>
-                          <tr>
-                            <th>Special Attack</th>
-                            <td>65</td>
-                          </tr>
-                          <tr>
-                            <th>Special Defense</th>
-                            <td>65</td>
-                          </tr>
-                          <tr>
-                            <th>Speed</th>
-                            <td>45</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- Inject modal content here -->
+            <div class="modal-body" id="modalBody"></div>
           </div>
         </div>
       </div>
