@@ -1,5 +1,4 @@
 let pokemonRepository = (function () {
-  let pokemonList = [];
   let repository = {
     AH: [],
     IQ: [],
@@ -7,25 +6,17 @@ let pokemonRepository = (function () {
   };
   let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=100';
   let colors = ['red', 'violet', 'gold', 'green', 'pink'];
-  let pokemonListContainer = $('#pokemon-list-container');
+  let buttonListContainer = $('#pokemon-list-container');
   let modalContent = $('#modalContent');
   let modalTitle = $('#modalTitle');
   let modalBody = $('#modalBody');
   let navButtons = $('.nav-link');
-  navButtons.on('click', setActiveNavButton);
-  $('#AHNavButton').on('click', showList('AH'));
-  $('#IQNavButton').on('click', showList('IQ'));
-  $('#RZNavButton').on('click', showList('RZ'));
+  navButtons.click(setActiveNavButton);
+  $('#AHNavButton').click(showButtonList('AH'));
+  $('#IQNavButton').click(showButtonList('IQ'));
+  $('#RZNavButton').click(showButtonList('RZ'));
 
-  function setActiveNavButton(e) {
-    // clear previour active button
-    navButtons.removeClass('active').removeAttr('aria-current');
-
-    // set target button active
-    $(e.target).addClass('active').attr('aria-current', 'page');
-  }
-
-  // Generic helper methods
+  /* --- Helper methods --- */
   function formatText(sentence) {
     function capitalize(w) {
       return w.charAt(0).toUpperCase() + w.slice(1);
@@ -40,7 +31,7 @@ let pokemonRepository = (function () {
     return colors[index];
   }
 
-  // Pokemon prototype
+  /* --- Pokemon prototype --- */
   function Pokemon(item) {
     this.name = formatText(item.name);
     this.detailsUrl = item.url;
@@ -70,8 +61,9 @@ let pokemonRepository = (function () {
     };
   }
 
-  // Fetch a basic list of pokemons from API
-  function loadList() {
+  /* --- API calls --- */
+  // Fetch a list of pokemons from API
+  function loadRepository() {
     function insertPokemon(item) {
       function itemIsValid(item) {
         let isObject = typeof item === 'object';
@@ -163,6 +155,16 @@ let pokemonRepository = (function () {
       });
   }
 
+  /* --- DOM Manipulation --- */
+
+  function setActiveNavButton(e) {
+    // clear previour active button
+    navButtons.removeClass('active').removeAttr('aria-current');
+
+    // set target button active
+    $(e.target).addClass('active').attr('aria-current', 'page');
+  }
+
   function addListButton(pokemon) {
     //setup button
     let pokemonButton = $(`<button>${pokemon.name}</button>`)
@@ -174,34 +176,33 @@ let pokemonRepository = (function () {
       .on('click', showPokemonDetails(pokemon));
 
     // append element
-    pokemonListContainer.append(pokemonButton);
+    buttonListContainer.append(pokemonButton);
   }
 
   function setModalContent(pokemon) {
-    // reset modal content
+    // reset modal
     modalTitle.empty();
     modalBody.empty();
     modalContent.removeClass();
-
     // set modal color
     modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
 
     // set modal title
     modalTitle.text(pokemon.name);
 
-    // set modal body
+    // set modal info
     let container = $('<div></div>').addClass('container-fluid text-center');
-    let mainRow = $('<div></div>').addClass('row g-0');
+    let mainRow = $('<div></div>').addClass('row g-2');
 
     // compose img column
-    let imgCol = $('<div></div>').addClass('col-sm-6');
+    let imgCol = $('<div></div>').addClass('col-lg-6');
     let pokemonImg = $('<img></img>')
       .addClass('img-fluid')
       .attr('src', `${pokemon.imageUrl}`)
       .attr('alt', `${pokemon.name} artwork`);
     imgCol.append(pokemonImg);
 
-    // compese misc column
+    // compose misc column
     let miscColumn = $('<div></div>').addClass(
       'col-lg-2 col-sm-4 d-flex flex-column'
     );
@@ -250,6 +251,7 @@ let pokemonRepository = (function () {
     modalBody.append(container);
   }
 
+  /* --- Event Handlers --- */
   function showPokemonDetails(pokemon) {
     return function () {
       loadDetails(pokemon).then(function (pokemon) {
@@ -258,32 +260,19 @@ let pokemonRepository = (function () {
     };
   }
 
-  function showList(key) {
+  function showButtonList(key) {
     return () => {
       // clear list
-      pokemonListContainer.empty();
+      buttonListContainer.empty();
       // populate list
       repository[key].forEach(addListButton);
     };
   }
 
-  // init app
+  /* --- Init app --- */
   function init() {
-    loadList().then(showList('AH'));
+    loadRepository().then(showButtonList('AH'));
   }
 
   return init();
-  // {
-  //   init: init,
-  //   loadList: loadList,
-  //   getAll: getAll,
-  //   addListItem: addPokemonButton,
-  // };
 })();
-
-//init list
-// pokemonRepository.init();
-// pokemonRepository.loadList().then(function () {
-//   // write html pokemon list
-//   pokemonRepository.getAll().forEach(pokemonRepository.addListItem);
-// });
