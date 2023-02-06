@@ -1,33 +1,29 @@
-let pokemonRepository = (function () {
-  let repository = {
+(function pokedexApp() {
+  const repository = {
     AH: [],
     IQ: [],
     RZ: [],
   };
-  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=100';
-  let colors = ['red', 'violet', 'gold', 'green', 'pink'];
-  let buttonListContainer = $('#pokemon-list-container');
-  let modalContent = $('#modalContent');
-  let modalTitle = $('#modalTitle');
-  let modalBody = $('#modalBody');
-  let navButtons = $('.nav-link');
-  navButtons.click(setActiveNavButton);
-  $('#AHNavButton').click(showButtonList('AH'));
-  $('#IQNavButton').click(showButtonList('IQ'));
-  $('#RZNavButton').click(showButtonList('RZ'));
+  const apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=100';
+  const colors = ['red', 'violet', 'gold', 'green', 'pink'];
+  const buttonListContainer = $('#pokemon-list-container');
+  const modalContent = $('#modalContent');
+  const modalTitle = $('#modalTitle');
+  const modalBody = $('#modalBody');
+  const navButtons = $('.nav-link');
 
   /* --- Helper methods --- */
   function formatText(sentence) {
     function capitalize(w) {
       return w.charAt(0).toUpperCase() + w.slice(1);
     }
-    let words = sentence.split(/[_-\s]/);
-    let capitalizedWords = words.map(capitalize);
+    const words = sentence.split(/[_-\s]/);
+    const capitalizedWords = words.map(capitalize);
     return capitalizedWords.join(' ');
   }
 
   function getRandomColor() {
-    let index = Math.floor(Math.random() * colors.length);
+    const index = Math.floor(Math.random() * colors.length);
     return colors[index];
   }
 
@@ -36,25 +32,26 @@ let pokemonRepository = (function () {
     this.name = formatText(item.name);
     this.detailsUrl = item.url;
     this.color = getRandomColor();
-    this.setFullDetails = function (details) {
-      // add basic properties
+    this.setFullDetails = function setFullDetails(details) {
+      // add img url
       this.imageUrl = details.sprites.other['official-artwork'].front_default;
-      this.height = `${details.height / 10} m`;
-      this.weight = `${details.weight / 10} kg`;
 
-      // add types
-      let types = '';
-      details.types.forEach(function (t) {
-        let type = formatText(t.type.name);
-        types = types + type + ', ';
-      });
-      this.types = types.slice(0, -2);
+      // add properties
+      const props = new Map();
+      props.set('Heigth', `${details.height / 10} m`);
+      props.set('Weight', `${details.weight / 10} kg`);
+
+      const types = details.types
+        .map((t) => formatText(t.type.name))
+        .join(', ');
+      props.set('Types', types);
+      this.props = props;
 
       // add stats
-      let stats = new Map();
-      details.stats.forEach(function (s) {
-        let statName = formatText(s.stat.name);
-        let statValue = s.base_stat;
+      const stats = new Map();
+      details.stats.forEach((s) => {
+        const statName = formatText(s.stat.name);
+        const statValue = s.base_stat;
         stats.set(statName, statValue);
       });
       this.stats = stats;
@@ -62,34 +59,36 @@ let pokemonRepository = (function () {
   }
 
   /* --- API calls --- */
-  // Fetch a list of pokemons from API
+  // Fetch list of pokemons from API
   function loadRepository() {
     function insertPokemon(item) {
-      function itemIsValid(item) {
-        let isObject = typeof item === 'object';
-        let hasName = 'name' in item;
-        let hasUrl = 'url' in item;
-        let itemIsValid = isObject && hasName && hasUrl;
-        return itemIsValid;
+      function itemIsValid(i) {
+        const isObject = typeof i === 'object';
+        const hasName = 'name' in i;
+        const hasUrl = 'url' in i;
+        const isValid = isObject && hasName && hasUrl;
+        return isValid;
       }
 
       function getRepoList(name) {
         if (name.localeCompare('i') === -1) {
           // name is alphabetically before I
           return repository.AH;
-        } else if (name.localeCompare('r') !== -1) {
+        }
+        if (name.localeCompare('r') !== -1) {
           // name is alphabetically after R
           return repository.RZ;
           // name is between I and Q
-        } else return repository.IQ;
+        }
+        return repository.IQ;
       }
 
       function addToRepo(pokemon) {
-        let list = getRepoList(pokemon.name);
-        let insertionIndex = list.findIndex(
+        const list = getRepoList(pokemon.name);
+        const insertionIndex = list.findIndex(
           (i) => pokemon.name.localeCompare(i.name) === -1
         );
-        let insertAtTheEnd = insertionIndex === -1;
+        const insertAtTheEnd = insertionIndex === -1;
         if (insertAtTheEnd) {
           list.push(pokemon);
         } else {
@@ -98,38 +97,32 @@ let pokemonRepository = (function () {
       }
 
       if (itemIsValid(item)) {
-        // insert pokemon
-        let pokemon = new Pokemon(item);
-        let list = getRepoList(pokemon.name);
-        addToRepo(pokemon);
+        addToRepo(new Pokemon(item));
       } else {
-        console.log('Invalid item');
+        console.error('Invalid item');
       }
     }
 
     return $.ajax(apiUrl)
-      .then(function (json) {
+      .then((json) => {
         json.results.forEach(insertPokemon);
       })
-      .then(function () {
-        console.log(repository);
-      })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        console.error(error);
       });
   }
 
-  // Fetch a pokemon's full details from API
+  // Fetch pokemon's full details from API
   function loadDetails(pokemon) {
     function detailsAreValid(details) {
       let isValid;
       try {
-        let imgNotNull =
+        const imgNotNull =
           details.sprites.other['official-artwork'].front_default !== null;
-        let heightNotNull = details.height !== null;
-        let weightNotNull = details.weight !== null;
-        let typesNotNull = details.types !== null;
-        let statsNotNull = details.stats !== null;
+        const heightNotNull = details.height !== null;
+        const weightNotNull = details.weight !== null;
+        const typesNotNull = details.types !== null;
+        const statsNotNull = details.stats !== null;
         isValid =
           imgNotNull &&
           imgNotNull &&
@@ -137,47 +130,24 @@ let pokemonRepository = (function () {
           weightNotNull &&
           typesNotNull &&
           statsNotNull;
-      } catch (e) {
-        console.log(e);
-        isValid = false;
-      } finally {
         return isValid;
+      } catch (e) {
+        console.error(e);
+        return false;
       }
     }
 
     return $.ajax(pokemon.detailsUrl)
-      .then(function (details) {
+      .then((details) => {
         if (detailsAreValid(details)) pokemon.setFullDetails(details);
         return pokemon;
       })
-      .catch(function (e) {
-        console.log(e);
+      .catch((e) => {
+        console.error(e);
       });
   }
 
   /* --- DOM Manipulation --- */
-
-  function setActiveNavButton(e) {
-    // clear previour active button
-    navButtons.removeClass('active').removeAttr('aria-current');
-
-    // set target button active
-    $(e.target).addClass('active').attr('aria-current', 'page');
-  }
-
-  function addListButton(pokemon) {
-    //setup button
-    let pokemonButton = $(`<button>${pokemon.name}</button>`)
-      .attr('data-bs-toggle', 'modal')
-      .attr('data-bs-target', '#pokemonModal')
-      .addClass('btn')
-      .addClass('btn-block')
-      .addClass(`btn-pokemon--${pokemon.color}`)
-      .on('click', showPokemonDetails(pokemon));
-
-    // append element
-    buttonListContainer.append(pokemonButton);
-  }
 
   function setModalContent(pokemon) {
     // reset modal
@@ -191,83 +161,103 @@ let pokemonRepository = (function () {
     modalTitle.text(pokemon.name);
 
     // set modal info
-    let container = $('<div></div>').addClass('container-fluid text-center');
-    let mainRow = $('<div></div>').addClass('row g-2');
+    const container = $('<div></div>').addClass('container-fluid text-center');
+    const mainRow = $('<div></div>').addClass('row gx-2');
 
     // compose img column
-    let imgCol = $('<div></div>').addClass('col-lg-6');
-    let pokemonImg = $('<img></img>')
+    const imgCol = $('<div></div>').addClass('col-lg-6');
+    const pokemonImg = $('<img></img>')
       .addClass('img-fluid')
       .attr('src', `${pokemon.imageUrl}`)
       .attr('alt', `${pokemon.name} artwork`);
     imgCol.append(pokemonImg);
 
-    // compose misc column
-    let miscColumn = $('<div></div>').addClass(
+    // compose props column
+    const propColumn = $('<div></div>').addClass(
       'col-lg-2 col-sm-4 d-flex flex-column'
     );
-    let heightCell = $('<div></div>')
-      .addClass('col modal-cell')
-      .append('<h5>Height</h5>')
-      .append(`<p>${pokemon.height}</p>`);
-
-    let weightCell = $('<div></div>')
-      .addClass('col modal-cell')
-      .append('<h5>Weight</h5>')
-      .append(`<p>${pokemon.weight}</p>`);
-
-    let typesCell = $('<div></div>')
-      .addClass('col modal-cell')
-      .append('<h5>Types</h5>')
-      .append(`<p>${pokemon.types}</p>`);
-
-    miscColumn.append(heightCell).append(weightCell).append(typesCell);
+    pokemon.props.forEach((value, prop) => {
+      const propCell = $('<div></div>').addClass('bg-light p-4 my-1 rounded-4');
+      const propTitle = $(`<h5>${prop}</h5>`).addClass('fw-bold');
+      const propValue = $(`<p>${value}</p>`);
+      propCell.append(propTitle).append(propValue);
+      propColumn.append(propCell);
+    });
 
     // compose stats column
-    let statsColumn = $('<div></div>').addClass(
+    const statsColumn = $('<div></div>').addClass(
       'col-lg-4 col-sm-8 d-flex flex-column'
     );
-    let statsCell = $('<div></div>').addClass('modal-cell flex-fill');
-    let statsTitle = $('<h5>Stats</h5>');
-    let statsTable = $('<table></table>').addClass(
+    const statsCell = $('<div></div>').addClass(
+      'bg-light py-4 px-3 my-1 rounded-4 flex-fill'
+    );
+    const statsTitle = $('<h5>Stats</h5>').addClass('fw-bold');
+    const statsTable = $('<table></table>').addClass(
       'table table-borderless text-start m-auto'
     );
-    let statsTbody = $('<tbody></tbody>');
+    const statsTbody = $('<tbody></tbody>');
 
-    for (let [statName, statValue] of pokemon.stats) {
-      let tRow = $('<tr></tr>');
-      let tHeader = $(`<th>${statName}</th>`);
-      let tData = $(`<td>${statValue}</td>`);
+    pokemon.stats.forEach((value, key) => {
+      const tRow = $('<tr></tr>');
+      const tHeader = $(`<th>${key}</th>`);
+      const tData = $(`<td>${value}</td>`);
       tRow.append(tHeader).append(tData);
       statsTbody.append(tRow);
-    }
+    });
+
     statsTable.append(statsTbody);
     statsCell.append(statsTitle).append(statsTable);
     statsColumn.append(statsCell);
 
     // append components
-    mainRow.append(imgCol).append(miscColumn).append(statsColumn);
+    mainRow.append(imgCol).append(propColumn).append(statsColumn);
     container.append(mainRow);
     modalBody.append(container);
   }
 
-  /* --- Event Handlers --- */
   function showPokemonDetails(pokemon) {
-    return function () {
-      loadDetails(pokemon).then(function (pokemon) {
+    return () => {
+      loadDetails(pokemon).then(() => {
         setModalContent(pokemon);
       });
     };
   }
 
-  function showButtonList(key) {
+  function addButton(pokemon) {
+    // setup button
+    const pokemonButton = $(`<button>${pokemon.name}</button>`)
+      .attr('data-bs-toggle', 'modal')
+      .attr('data-bs-target', '#pokemonModal')
+      .addClass('btn')
+      .addClass('btn-block')
+      .addClass(`btn-pokemon--${pokemon.color}`)
+      .on('click', showPokemonDetails(pokemon));
+
+    // append element
+    buttonListContainer.append(pokemonButton);
+  }
+
+  function showButtonList(subset) {
     return () => {
       // clear list
       buttonListContainer.empty();
       // populate list
-      repository[key].forEach(addListButton);
+      repository[subset].forEach(addButton);
     };
   }
+
+  function setActiveNavButton(e) {
+    // clear previour active button
+    navButtons.removeClass('active').removeAttr('aria-current');
+
+    // set target button active
+    $(e.target).addClass('active').attr('aria-current', 'page');
+  }
+
+  navButtons.click(setActiveNavButton);
+  $('#AHNavButton').click(showButtonList('AH'));
+  $('#IQNavButton').click(showButtonList('IQ'));
+  $('#RZNavButton').click(showButtonList('RZ'));
 
   /* --- Init app --- */
   function init() {

@@ -33,11 +33,7 @@ body {
 }
 
 /* Buttons */
-.btn-pokemon--pink,
-.btn-pokemon--violet,
-.btn-pokemon--gold,
-.btn-pokemon--green,
-.btn-pokemon--red {
+.btn-pokemon--pink, .btn-pokemon--violet, .btn-pokemon--gold, .btn-pokemon--green, .btn-pokemon--red {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 1rem;
   --bs-btn-font-weight: 600;
@@ -100,11 +96,7 @@ body {
 }
 
 /* Modal */
-.modal--pink,
-.modal--violet,
-.modal--green,
-.modal--gold,
-.modal--red {
+.modal--pink, .modal--violet, .modal--green, .modal--gold, .modal--red {
   --bs-modal-border-radius: 1.5rem;
   --bs-modal-header-border-width: 0;
 }
@@ -127,15 +119,4 @@ body {
 
 .modal--pink {
   --bs-modal-bg: var(--pk-lighter-pink);
-}
-
-.modal-cell {
-  background-color: var(--bs-white);
-  padding: 1rem;
-  margin: 0.25rem 0;
-  border-radius: 1rem;
-}
-
-.modal-cell h5 {
-  font-weight: bold;
 }

@@ -134,36 +134,25 @@ $pk-pink: rgb(255, 10, 124);
 
   .modal--red {
     @extend %modal;
-    --bs-modal-bg: var(--lighet-red);
+    --bs-modal-bg: var(--ligher-red);
   }
 
   .modal--gold {
     @extend %modal;
-    --bs-modal-bg: var(--lighet-gold);
+    --bs-modal-bg: var(--ligher-gold);
   }
 
   .modal--green {
     @extend %modal;
-    --bs-modal-bg: var(--lighet-green);
+    --bs-modal-bg: var(--ligher-green);
   }
 
   .modal--violet {
     @extend %modal;
-    --bs-modal-bg: var(--lighet-violet);
+    --bs-modal-bg: var(--ligher-violet);
   }
 
   .modal--pink {
     @extend %modal;
-    --bs-modal-bg: var(--lighet-pink);
-  }
-  
-  .modal-cell {
-    background-color: var(--bs-white);
-    padding: 1rem;
-    margin: 0.25rem;
-    border-radius: 1rem;
-  }
-  
-  .modal-cell h5 {
-    font-weight: bold;
+    --bs-modal-bg: var(--ligher-pink);
   }
