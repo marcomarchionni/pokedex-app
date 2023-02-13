@@ -70,9 +70,12 @@ $pk-yellow: rgb(235, 180, 0);
   --pk-darker-red: #{shade($pk-red, 20%)};
   
   --pk-white: #{$pk-white};
-  --pk-white-darker1: #{shade($pk-white, 40%)};
-  --pk-white-darker2: #{shade($pk-white, 50%)};
-  --pk-white-darker3: #{shade($pk-white, 60%)};
+  --pk-white-light1: #{shade($pk-white, 5%)};
+  --pk-white-light2: #{shade($pk-white, 10%)};
+  --pk-white-light3: #{shade($pk-white, 15%)};
+  --pk-white-dark1: #{shade($pk-white, 40%)};
+  --pk-white-dark2: #{shade($pk-white, 50%)};
+  --pk-white-dark3: #{shade($pk-white, 60%)};
 
   --pk-lighter-yellow: #{tint($pk-yellow, 30%)};
   --pk-light-yellow: #{tint($pk-yellow, 20%)};
@@ -196,15 +199,15 @@ $pk-yellow: rgb(235, 180, 0);
   }
 
   .btn-pokemon--white {
-    --bs-btn-color: var(--pk-white-darker1);
-    --bs-btn-hover-color: var(--pk-white-darker2);
-    --bs-btn-active-color: var(--pk-white-darker3);
+    --bs-btn-color: var(--pk-white-dark1);
+    --bs-btn-hover-color: var(--pk-white-dark2);
+    --bs-btn-active-color: var(--pk-white-dark3);
     --bs-btn-bg: var(--pk-white);
-    --bs-btn-border-color: var(--pk-white-darker1);
+    --bs-btn-border-color: var(--pk-white-light1);
     --bs-btn-hover-bg: var(--pk-white);
-    --bs-btn-hover-border-color: var(--pk-white-darker2);
+    --bs-btn-hover-border-color: var(--pk-white-light2);
     --bs-btn-active-bg: var(--pk-white);
-    --bs-btn-active-border-color: var(--pk-white-darker3);
+    --bs-btn-active-border-color: var(--pk-white-light3);
     --bs-btn-focus-shadow-rgb: #{red($pk-white)}, #{green($pk-white)}, #{blue($pk-white)};
   }
 

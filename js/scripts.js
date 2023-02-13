@@ -61,12 +61,11 @@
       });
       this.stats = stats;
     };
-    this.getColor = function () {
+    this.setColor = function () {
       return $.ajax(this.speciesUrl)
         .then((json) => {
-          console.log(json.color.name);
-          this.color = json.color.name;
-          return this.color;
+          this.colorModifier = json.color.name;
+          this.color = formatText(json.color.name);
         })
         .catch((error) => {
           console.error(error);
@@ -166,16 +165,9 @@
   /* --- DOM Manipulation --- */
 
   function setModalBody(pokemon) {
-    modalContent.removeClass();
-    // set modal color
-    modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
-
-    // set modal title
-    modalTitle.text(pokemon.name);
-
     // set modal info
     const container = $('<div></div>').addClass('container-fluid text-center');
-    const mainRow = $('<div></div>').addClass('row gx-2');
+    const mainRow = $('<div></div>').addClass('row gx-2 gy-0');
 
     // compose img column
     const imgCol = $('<div></div>').addClass('col-lg-6');
@@ -185,28 +177,32 @@
       .attr('alt', `${pokemon.name} artwork`);
     imgCol.append(pokemonImg);
 
-    // compose props column
+    // compose property column
     const propColumn = $('<div></div>').addClass(
       'col-lg-2 col-sm-4 d-flex flex-column'
     );
     pokemon.props.forEach((value, prop) => {
-      const propCell = $('<div></div>').addClass('bg-light p-4 my-1 rounded-4');
+      const propCell = $('<div></div>').addClass(
+        'bg-light p-4 my-1 rounded-4 flex-grow-1'
+      );
       const propTitle = $(`<h5>${prop}</h5>`).addClass('fw-bold');
-      const propValue = $(`<p>${value}</p>`);
+      const propValue = $(`<p>${value}</p>`).addClass('mb-0');
       propCell.append(propTitle).append(propValue);
       propColumn.append(propCell);
     });
 
-    // compose stats column
+    // compose third column
     const statsColumn = $('<div></div>').addClass(
       'col-lg-4 col-sm-8 d-flex flex-column'
     );
+
+    // stats cell
     const statsCell = $('<div></div>').addClass(
-      'bg-light py-4 px-3 my-1 rounded-4 flex-fill'
+      'bg-light py-4 px-3 my-1 rounded-4 flex-grow-1'
     );
-    const statsTitle = $('<h5>Stats</h5>').addClass('fw-bold');
+    const statsTitle = $('<h5></h5>').text('Stats').addClass('fw-bold');
     const statsTable = $('<table></table>').addClass(
-      'table table-borderless text-start m-auto'
+      'table table-borderless text-start m-auto lh-1'
     );
     const statsTbody = $('<tbody></tbody>');
 
@@ -220,7 +216,18 @@
 
     statsTable.append(statsTbody);
     statsCell.append(statsTitle).append(statsTable);
-    statsColumn.append(statsCell);
+
+    // color cell
+    const colorCell = $('<div></div>').addClass(
+      'bg-light py-4 px-3 my-1 rounded-4 flex-grow-1'
+    );
+    const colorCellTitle = $('<h5></h5>')
+      .text('Species Color')
+      .addClass('fw-bold');
+    const colorCellValue = $(`<p>${pokemon.color}</p>`).addClass('mb-0');
+    colorCell.append(colorCellTitle).append(colorCellValue);
+
+    statsColumn.append(statsCell).append(colorCell);
 
     // append components
     mainRow.append(imgCol).append(propColumn).append(statsColumn);
@@ -228,13 +235,15 @@
     modalBody.append(container);
   }
 
-  function showPokemonDetails(pokemon) {
+  function showModal(pokemon) {
     return () => {
       // set modal title
       modalTitle.text(pokemon.name);
       // set modal color
       modalContent.removeClass();
-      modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
+      modalContent.addClass(
+        `modal-content p-4 modal--${pokemon.colorModifier}`
+      );
       // reset modal body
       modalBody.empty();
       // set modal body
@@ -245,6 +254,9 @@
   }
 
   function addButton(pokemon) {
+    function setButtonColor() {
+      pokemonButton.addClass(`btn-pokemon--${pokemon.colorModifier}`);
+    }
     // setup button
     const pokemonButton = $(`<button>${pokemon.name}</button>`)
       .attr('data-bs-toggle', 'modal')
@@ -252,16 +264,17 @@
       .addClass('btn')
       .addClass('btn-block')
       .addClass(`btn-pokemon`)
-      .on('click', showPokemonDetails(pokemon));
+      .on('click', showModal(pokemon));
 
-    // append element
+    // append button
     buttonListContainer.append(pokemonButton);
 
-    // set color
-    pokemon.getColor().then((color) => {
-      console.log(color);
-      pokemonButton.addClass(`btn-pokemon--${color}`);
-    });
+    // set button color
+    if (pokemon.color) {
+      setButtonColor();
+    } else {
+      pokemon.setColor().then(setButtonColor);
+    }
   }
 
   function showButtonList(subset) {
