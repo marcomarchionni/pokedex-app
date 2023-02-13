@@ -1,30 +1,54 @@
 /* Variables */
 :root {
-  --pk-lighter-gold: #f1cb4d;
-  --pk-light-gold: #efc333;
-  --pk-gold: #ebb400;
-  --pk-dark-gold: #c89900;
-  --pk-darker-gold: #bc9000;
-  --pk-lighter-violet: #9778c8;
-  --pk-light-violet: #8865c1;
-  --pk-violet: #6a3eb1;
-  --pk-dark-violet: #5a3596;
-  --pk-darker-violet: #55328e;
+  --pk-lighter-black: #555555;
+  --pk-light-black: #3d3d3d;
+  --pk-black: #0c0c0c;
+  --pk-dark-black: #0a0a0a;
+  --pk-darker-black: #0a0a0a;
+  --pk-lighter-blue: #5d5dcd;
+  --pk-light-blue: #4545c6;
+  --pk-blue: #1717b8;
+  --pk-dark-blue: #14149c;
+  --pk-darker-blue: #121293;
+  --pk-lighter-brown: #a76969;
+  --pk-light-brown: #9a5454;
+  --pk-brown: #812929;
+  --pk-dark-brown: #6e2323;
+  --pk-darker-brown: #672121;
+  --pk-lighter-gray: #9a9999;
+  --pk-light-gray: #8b8a8a;
+  --pk-gray: #6e6d6d;
+  --pk-dark-gray: #5e5d5d;
+  --pk-darker-gray: #585757;
   --pk-lighter-green: #4dc55f;
   --pk-light-green: #33bd48;
   --pk-green: #00ac1a;
   --pk-dark-green: #009216;
   --pk-darker-green: #008a15;
-  --pk-lighter-red: #f14f4d;
-  --pk-light-red: #ef3633;
-  --pk-red: #eb0400;
-  --pk-dark-red: #c80300;
-  --pk-darker-red: #bc0300;
   --pk-lighter-pink: #ff54a3;
   --pk-light-pink: #ff3b96;
   --pk-pink: #ff0a7c;
   --pk-dark-pink: #d90969;
   --pk-darker-pink: #cc0863;
+  --pk-lighter-purple: #9778c8;
+  --pk-light-purple: #8865c1;
+  --pk-purple: #6a3eb1;
+  --pk-dark-purple: #5a3596;
+  --pk-darker-purple: #55328e;
+  --pk-lighter-red: #f14f4d;
+  --pk-light-red: #ef3633;
+  --pk-red: #eb0400;
+  --pk-dark-red: #c80300;
+  --pk-darker-red: #bc0300;
+  --pk-white: white;
+  --pk-white-darker1: #999999;
+  --pk-white-darker2: gray;
+  --pk-white-darker3: #666666;
+  --pk-lighter-yellow: #f1cb4d;
+  --pk-light-yellow: #efc333;
+  --pk-yellow: #ebb400;
+  --pk-dark-yellow: #c89900;
+  --pk-darker-yellow: #bc9000;
 }
 
 /* General */
@@ -33,7 +57,7 @@ body {
 }
 
 /* Buttons */
-.btn-pokemon--pink, .btn-pokemon--violet, .btn-pokemon--gold, .btn-pokemon--green, .btn-pokemon--red {
+.btn-pokemon {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 1rem;
   --bs-btn-font-weight: 600;
@@ -43,6 +67,82 @@ body {
   --bs-btn-border-radius: 1rem;
   --bs-btn-active-color: var(--bs-white);
   --bs-btn-active-shadow: inset 0 3px 5px rgba (0, 0, 0, 0.125);
+}
+
+.btn-pokemon--yellow, .btn-pokemon--red, .btn-pokemon--purple, .btn-pokemon--pink, .btn-pokemon--green, .btn-pokemon--gray, .btn-pokemon--brown, .btn-pokemon--blue, .btn-pokemon--black {
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-active-color: var(--bs-white);
+}
+
+.btn-pokemon--black {
+  --bs-btn-bg: var(--pk-light-black);
+  --bs-btn-border-color: var(--pk-light-black);
+  --bs-btn-hover-bg: var(--pk-black);
+  --bs-btn-hover-border-color: var(--pk-black);
+  --bs-btn-active-bg: var(--pk-darker-black);
+  --bs-btn-active-border-color: var(--pk-dark-black);
+  --bs-btn-focus-shadow-rgb: 12, 12, 12;
+}
+
+.btn-pokemon--blue {
+  --bs-btn-bg: var(--pk-light-blue);
+  --bs-btn-border-color: var(--pk-light-blue);
+  --bs-btn-hover-bg: var(--pk-blue);
+  --bs-btn-hover-border-color: var(--pk-blue);
+  --bs-btn-active-bg: var(--pk-darker-blue);
+  --bs-btn-active-border-color: var(--pk-dark-blue);
+  --bs-btn-focus-shadow-rgb: 23, 23, 184;
+}
+
+.btn-pokemon--brown {
+  --bs-btn-bg: var(--pk-light-brown);
+  --bs-btn-border-color: var(--pk-light-brown);
+  --bs-btn-hover-bg: var(--pk-brown);
+  --bs-btn-hover-border-color: var(--pk-brown);
+  --bs-btn-active-bg: var(--pk-darker-brown);
+  --bs-btn-active-border-color: var(--pk-dark-brown);
+  --bs-btn-focus-shadow-rgb: 129, 41, 41;
+}
+
+.btn-pokemon--gray {
+  --bs-btn-bg: var(--pk-light-gray);
+  --bs-btn-border-color: var(--pk-light-gray);
+  --bs-btn-hover-bg: var(--pk-gray);
+  --bs-btn-hover-border-color: var(--pk-gray);
+  --bs-btn-active-bg: var(--pk-darker-gray);
+  --bs-btn-active-border-color: var(--pk-dark-gray);
+  --bs-btn-focus-shadow-rgb: 110, 109, 109;
+}
+
+.btn-pokemon--green {
+  --bs-btn-bg: var(--pk-light-green);
+  --bs-btn-border-color: var(--pk-light-green);
+  --bs-btn-hover-bg: var(--pk-green);
+  --bs-btn-hover-border-color: var(--pk-green);
+  --bs-btn-active-bg: var(--pk-darker-green);
+  --bs-btn-active-border-color: var(--pk-dark-green);
+  --bs-btn-focus-shadow-rgb: 0, 172, 26;
+}
+
+.btn-pokemon--pink {
+  --bs-btn-bg: var(--pk-light-pink);
+  --bs-btn-border-color: var(--pk-light-pink);
+  --bs-btn-hover-bg: var(--pk-pink);
+  --bs-btn-hover-border-color: var(--pk-pink);
+  --bs-btn-active-bg: var(--pk-darker-pink);
+  --bs-btn-active-border-color: var(--pk-dark-pink);
+  --bs-btn-focus-shadow-rgb: 255, 10, 124;
+}
+
+.btn-pokemon--purple {
+  --bs-btn-bg: var(--pk-light-purple);
+  --bs-btn-border-color: var(--pk-light-purple);
+  --bs-btn-hover-bg: var(--pk-purple);
+  --bs-btn-hover-border-color: var(--pk-purple);
+  --bs-btn-active-bg: var(--pk-darker-purple);
+  --bs-btn-active-border-color: var(--pk-dark-purple);
+  --bs-btn-focus-shadow-rgb: 106, 62, 177;
 }
 
 .btn-pokemon--red {
@@ -55,68 +155,71 @@ body {
   --bs-btn-focus-shadow-rgb: 235, 4, 0;
 }
 
-.btn-pokemon--green {
-  --bs-btn-bg: var(--pk-light-green);
-  --bs-btn-border-color: var(--pk-light-green);
-  --bs-btn-hover-bg: var(--pk-green);
-  --bs-btn-hover-border-color: var(--pk-green);
-  --bs-btn-active-bg: var(--pk-darker-green);
-  --bs-btn-active-border-color: var(--pk-dark-green);
-  --bs-btn-focus-shadow-rgb: 172, 172, 26;
+.btn-pokemon--white {
+  --bs-btn-color: var(--pk-white-darker1);
+  --bs-btn-hover-color: var(--pk-white-darker2);
+  --bs-btn-active-color: var(--pk-white-darker3);
+  --bs-btn-bg: var(--pk-white);
+  --bs-btn-border-color: var(--pk-white-darker1);
+  --bs-btn-hover-bg: var(--pk-white);
+  --bs-btn-hover-border-color: var(--pk-white-darker2);
+  --bs-btn-active-bg: var(--pk-white);
+  --bs-btn-active-border-color: var(--pk-white-darker3);
+  --bs-btn-focus-shadow-rgb: 255, 255, 255;
 }
 
-.btn-pokemon--gold {
-  --bs-btn-bg: var(--pk-light-gold);
-  --bs-btn-border-color: var(--pk-light-gold);
-  --bs-btn-hover-bg: var(--pk-gold);
-  --bs-btn-hover-border-color: var(--pk-gold);
-  --bs-btn-active-bg: var(--pk-darker-gold);
-  --bs-btn-active-border-color: var(--pk-dark-gold);
-  --bs-btn-focus-shadow-rgb: gold(#ebb400), 180, 0;
-}
-
-.btn-pokemon--violet {
-  --bs-btn-bg: var(--pk-light-violet);
-  --bs-btn-border-color: var(--pk-light-violet);
-  --bs-btn-hover-bg: var(--pk-violet);
-  --bs-btn-hover-border-color: var(--pk-violet);
-  --bs-btn-active-bg: var(--pk-darker-violet);
-  --bs-btn-active-border-color: var(--pk-dark-violet);
-  --bs-btn-focus-shadow-rgb: violet(#6a3eb1), 62, 177;
-}
-
-.btn-pokemon--pink {
-  --bs-btn-bg: var(--pk-light-pink);
-  --bs-btn-border-color: var(--pk-light-pink);
-  --bs-btn-hover-bg: var(--pk-pink);
-  --bs-btn-hover-border-color: var(--pk-pink);
-  --bs-btn-active-bg: var(--pk-darker-pink);
-  --bs-btn-active-border-color: var(--pk-dark-pink);
-  --bs-btn-focus-shadow-rgb: pink(#ff0a7c), 10, 124;
+.btn-pokemon--yellow {
+  --bs-btn-bg: var(--pk-light-yellow);
+  --bs-btn-border-color: var(--pk-light-yellow);
+  --bs-btn-hover-bg: var(--pk-yellow);
+  --bs-btn-hover-border-color: var(--pk-yellow);
+  --bs-btn-active-bg: var(--pk-darker-yellow);
+  --bs-btn-active-border-color: var(--pk-dark-yellow);
+  --bs-btn-focus-shadow-rgb: 235, 180, 0;
 }
 
 /* Modal */
-.modal--pink, .modal--violet, .modal--green, .modal--gold, .modal--red {
+.modal--yellow, .modal--white, .modal--red, .modal--purple, .modal--pink, .modal--green, .modal--gray, .modal--brown, .modal--blue, .modal--black {
   --bs-modal-border-radius: 1.5rem;
   --bs-modal-header-border-width: 0;
 }
 
-.modal--red {
-  --bs-modal-bg: var(--pk-lighter-red);
+.modal--black {
+  --bs-modal-bg: var(--pk-lighter-black);
 }
 
-.modal--gold {
-  --bs-modal-bg: var(--pk-lighter-gold);
+.modal--blue {
+  --bs-modal-bg: var(--pk-lighter-blue);
+}
+
+.modal--brown {
+  --bs-modal-bg: var(--pk-lighter-brown);
+}
+
+.modal--gray {
+  --bs-modal-bg: var(--pk-lighter-gray);
 }
 
 .modal--green {
   --bs-modal-bg: var(--pk-lighter-green);
 }
 
-.modal--violet {
-  --bs-modal-bg: var(--pk-lighter-violet);
-}
-
 .modal--pink {
   --bs-modal-bg: var(--pk-lighter-pink);
+}
+
+.modal--purple {
+  --bs-modal-bg: var(--pk-lighter-purple);
+}
+
+.modal--red {
+  --bs-modal-bg: var(--pk-lighter-red);
+}
+
+.modal--white {
+  --bs-modal-bg: var(--pk-white);
+}
+
+.modal--yellow {
+  --bs-modal-bg: var(--pk-lighter-yellow);
 }

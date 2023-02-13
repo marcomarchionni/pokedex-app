@@ -27,11 +27,16 @@
     return colors[index];
   }
 
+  function getColor(url) {
+    const speciesUrl = url.replace('pokemon', 'pokemon-species');
+    console.log(speciesUrl);
+  }
+
   /* --- Pokemon prototype --- */
   function Pokemon(item) {
-    this.name = formatText(item.name);
+    this.id = this.name = formatText(item.name);
     this.detailsUrl = item.url;
-    this.color = getRandomColor();
+    this.speciesUrl = item.url.replace('pokemon', 'pokemon-species');
     this.setFullDetails = function setFullDetails(details) {
       // add img url
       this.imageUrl = details.sprites.other['official-artwork'].front_default;
@@ -55,6 +60,17 @@
         stats.set(statName, statValue);
       });
       this.stats = stats;
+    };
+    this.getColor = function () {
+      return $.ajax(this.speciesUrl)
+        .then((json) => {
+          console.log(json.color.name);
+          this.color = json.color.name;
+          return this.color;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     };
   }
 
@@ -149,10 +165,7 @@
 
   /* --- DOM Manipulation --- */
 
-  function setModalContent(pokemon) {
-    // reset modal
-    modalTitle.empty();
-    modalBody.empty();
+  function setModalBody(pokemon) {
     modalContent.removeClass();
     // set modal color
     modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
@@ -217,8 +230,16 @@
 
   function showPokemonDetails(pokemon) {
     return () => {
+      // set modal title
+      modalTitle.text(pokemon.name);
+      // set modal color
+      modalContent.removeClass();
+      modalContent.addClass(`modal-content p-4 modal--${pokemon.color}`);
+      // reset modal body
+      modalBody.empty();
+      // set modal body
       loadDetails(pokemon).then(() => {
-        setModalContent(pokemon);
+        setModalBody(pokemon);
       });
     };
   }
@@ -230,11 +251,17 @@
       .attr('data-bs-target', '#pokemonModal')
       .addClass('btn')
       .addClass('btn-block')
-      .addClass(`btn-pokemon--${pokemon.color}`)
+      .addClass(`btn-pokemon`)
       .on('click', showPokemonDetails(pokemon));
 
     // append element
     buttonListContainer.append(pokemonButton);
+
+    // set color
+    pokemon.getColor().then((color) => {
+      console.log(color);
+      pokemonButton.addClass(`btn-pokemon--${color}`);
+    });
   }
 
   function showButtonList(subset) {
