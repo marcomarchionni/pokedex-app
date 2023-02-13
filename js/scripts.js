@@ -22,16 +22,6 @@
     return capitalizedWords.join(' ');
   }
 
-  function getRandomColor() {
-    const index = Math.floor(Math.random() * colors.length);
-    return colors[index];
-  }
-
-  function getColor(url) {
-    const speciesUrl = url.replace('pokemon', 'pokemon-species');
-    console.log(speciesUrl);
-  }
-
   /* --- Pokemon prototype --- */
   function Pokemon(item) {
     this.id = this.name = formatText(item.name);
