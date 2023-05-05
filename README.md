@@ -1,5 +1,3 @@
 # pokedex-app
 
-This small web application displays a list of Pokémon and allows the user to view details for each of them
-
-The app is written in HTML, CSS, and JavaScript. JavaScript allows to connect an external API and enables the viewing of data points in detail.
+Pokédex App is a web application that allows the user to view detailed information about a large variety of Pokemons. Pokemons' details are fetched from [PokéAPI](https://pokeapi.co/), a free and popular educational API. The app is written in HTML, CSS, JavaScript and makes use of jQuery 3.6.3 and Bootstrap 5.3.0.
